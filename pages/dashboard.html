@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dashboard - Wayne Premium</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand small">
+      <img src="../assets/logo.png" alt="logo" class="Logo">
+      <strong>Wayne Premium</strong>
+    </div>
+    <div class="top-actions">
+      <button class="btn outline" id="themeToggle">🌓 Tema</button>
+      <button class="btn" id="logoutBtn">Sair</button>
+    </div>
+  </div>
+
+  <main class="container">
+    <section class="panel">
+      <h2 id="welcomeTitle">Dashboard</h2>
+      <p id="roleBadge" class="badge"></p>
+
+      <div class="controls">
+        <input id="filtro" type="text" placeholder="Buscar recurso..." />
+        <select id="tipoFilter">
+          <option value="">Todos os tipos</option>
+          <option value="equipamento">Equipamento</option>
+          <option value="veiculo">Veículo</option>
+          <option value="dispositivo">Dispositivo</option>
+        </select>
+        <button class="btn" id="btnAddToggle">Novo recurso</button>
+      </div>
+
+      <div id="addBox" class="card hidden">
+        <h3>Adicionar / Editar Recurso</h3>
+        <label>Nome<input id="nomeRec" type="text"></label>
+        <label>Tipo
+          <select id="tipoRec">
+            <option value="equipamento">Equipamento</option>
+            <option value="veiculo">Veículo</option>
+            <option value="dispositivo">Dispositivo</option>
+          </select>
+        </label>
+        <label>Descrição<textarea id="descRec"></textarea></label>
+        <div class="row">
+          <button class="btn" id="saveRec">Salvar</button>
+          <button class="btn outline" id="cancelRec">Cancelar</button>
+        </div>
+      </div>
+
+      <ul id="listaRecursos" class="list"></ul>
+    </section>
+
+    <aside class="panel side">
+      <h3>Estatísticas</h3>
+      <canvas id="chart" width="300" height="200"></canvas>
+      <div class="stats-grid">
+        <div class="stat-card total">
+          <h4>Total</h4>
+          <p id="totalCount">0</p>
+        </div>
+        <div class="stat-card equip">
+          <h4>Equipamentos</h4>
+          <p id="countEquip">0</p>
+        </div>
+        <div class="stat-card veic">
+          <h4>Veículos</h4>
+          <p id="countVeic">0</p>
+        </div>
+        <div class="stat-card disp">
+          <h4>Dispositivos</h4>
+          <p id="countDisp">0</p>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="center small">Projeto Wayne Premium • Dados salvos no localStorage</footer>
+
+  <script src="../script.js"></script>
+  <script>
+    // Protege a página: exige login (qualquer role)
+    if(!window.appAuth.authorize([])) {
+      // authorize redireciona se necessário
+    } else {
+      document.getElementById('logoutBtn').addEventListener('click', ()=> window.appAuth.logout());
+      document.getElementById('themeToggle').addEventListener('click', ()=> window.appUI.toggleTheme());
+
+      // Toggle add form
+      const btnAddToggle = document.getElementById('btnAddToggle');
+      const addBox = document.getElementById('addBox');
+      btnAddToggle.addEventListener('click', ()=> {
+        addBox.classList.toggle('hidden');
+        window.appUI.focusInput('nomeRec');
+      });
+
+      // Save / cancel handlers (fixed reference)
+      document.getElementById('cancelRec').addEventListener('click', ()=> { addBox.classList.add('hidden'); window.appUI.clearForm(); });
+      document.getElementById('saveRec').addEventListener('click', ()=> window.appUI.saveCurrent());
+
+      // Filters
+      document.getElementById('filtro').addEventListener('input', ()=> window.appUI.renderList());
+      document.getElementById('tipoFilter').addEventListener('change', ()=> window.appUI.renderList());
+
+      // Init UI
+      window.addEventListener('DOMContentLoaded', ()=> {
+        window.appUI.initDashboard();
+        window.appUI.renderList();
+      });
+    }
+  </script>
+</body>
+</html>

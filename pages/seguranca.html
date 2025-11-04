@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Área de Segurança - Wayne Premium</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <div class="login-container">
+    <main class="card login-box">
+      <h2>Área de Segurança</h2>
+      <p>Somente pessoal de segurança e administradores podem ver esta página.</p>
+      <div id="content"></div>
+      <div class="row"><button class="btn" id="back">Voltar</button></div>
+    </main>
+  </div>
+
+  <script src="../script.js"></script>
+  <script>
+    if(!window.appAuth.authorize(['seguranca','admin'])) {
+      // authorize redireciona automaticamente
+    } else {
+      document.getElementById('back').addEventListener('click', ()=> location.href = 'dashboard.html');
+      document.getElementById('content').innerHTML = '<ul class="list"><li>Registro de Entrada - Portão Norte</li><li>Monitoramento Ativo - Setor 3</li><li>Relatório de Rondas - Atualizado às 07:30</li></ul>';
+    }
+  </script>
+</body>
+</html>

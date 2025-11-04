@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login - Wayne Premium</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <div class="login-container">
+    <main class="card login-box">
+      <img src="../assets/logo.png" class="logo" alt="Wayne Logo">
+      <h2>Login</h2>
+      <form id="loginForm" class="form">
+        <label>
+          E-mail
+          <input type="email" id="email" required placeholder="bruce@wayne.com">
+        </label>
+        <label>
+          Senha
+          <input type="password" id="senha" required placeholder="batman123">
+        </label>
+
+        <div class="row">
+          <button class="btn" type="submit">Entrar</button>
+          <button class="btn outline" id="themeBtn" type="button">🌓 Tema</button>
+        </div>
+      </form>
+      <p class="small">Admin: bruce@wayne.com / batman123 • Gerente: gordon@wayne.com / gordon123 • Segurança: lucius@wayne.com / lucius123 • Usuário: alfred@wayne.com / alfred123</p>
+    </main>
+  </div>
+
+  <script src="../script.js"></script>
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const senha = document.getElementById('senha').value.trim();
+      const ok = window.appAuth.login(email, senha);
+      if(ok.success){
+        Swal.fire({icon:'success', title:'Bem-vindo', text: ok.msg, timer:1200, showConfirmButton:false})
+          .then(()=> window.location.href = '../pages/dashboard.html');
+      } else {
+        Swal.fire({icon:'error', title:'Erro', text: ok.msg});
+      }
+    });
+
+    document.getElementById('themeBtn').addEventListener('click', ()=> window.appUI.toggleTheme());
+  </script>
+</body>
+</html>
